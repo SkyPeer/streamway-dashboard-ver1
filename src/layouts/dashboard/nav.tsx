@@ -8,6 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import { useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
+import SettingsInputAntennaIcon from '@mui/icons-material/SettingsInputAntenna';
 
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
@@ -112,7 +113,24 @@ export function NavContent({ data, slots, workspaces, sx }: NavContentProps) {
 
   return (
     <>
-      <Logo />
+      {/*<Logo />*/}
+
+      <Box
+        sx={{
+          margin: 1.5,
+          color: 'white',
+          width: 30,
+          height: 30,
+          borderRadius: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bgcolor: 'primary.main',
+        }}>
+        <SettingsInputAntennaIcon />
+      </Box>
+
 
       {slots?.topArea}
 

@@ -42,6 +42,7 @@ const MuiCard: Components<Theme>['MuiCard'] = {
       zIndex: 0,
       position: 'relative',
       boxShadow: theme.vars.customShadows.card,
+      // @ts-expect-error : ignore
       borderRadius: theme.shape.borderRadius * 2,
     }),
   },
