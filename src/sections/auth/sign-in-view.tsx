@@ -9,6 +9,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
+import SettingsInputAntennaIcon from '@mui/icons-material/SettingsInputAntenna';
 
 import { useRouter } from 'src/routes/hooks';
 
@@ -30,16 +31,6 @@ export function SignInView() {
     try {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
-
-      /*const raw = JSON.stringify({});*/
-
-      // const requestOptions = {
-      //   method: "POST",
-      //   headers: myHeaders,
-      //   body: raw,
-      //   redirect: "follow"
-      // };
-
       const response: any = await axios.post("http://localhost:3000/users/login", {user: {email, password}})
       const user = response.data.user;
       console.log(user);
@@ -75,9 +66,9 @@ export function SignInView() {
         }}
       />
 
-      <Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>
-        Forgot password?
-      </Link>
+      {/*<Link variant="body2" color="inherit" sx={{ mb: 1.5 }}>*/}
+      {/*  Forgot password?*/}
+      {/*</Link>*/}
 
       <TextField
         fullWidth
@@ -125,7 +116,9 @@ export function SignInView() {
           mb: 5,
         }}
       >
+
         <Typography variant="h5">Sign in</Typography>
+        <SettingsInputAntennaIcon />
         {/*<Typography*/}
         {/*  variant="body2"*/}
         {/*  sx={{*/}
