@@ -102,8 +102,7 @@ export function UserView() {
 
   const successForm = (
     <Snackbar
-      anchorOrigin={{ vertical: 'top',
-        horizontal: 'left', }}
+      anchorOrigin={{ vertical: 'top', horizontal: 'left', }}
       open={success}
       autoHideDuration={3000}
       onClose={()=>setSuccess(false)}
