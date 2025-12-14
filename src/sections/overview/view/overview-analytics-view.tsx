@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
@@ -13,26 +15,90 @@ import { AnalyticsWidgetSummary } from '../analytics-widget-summary';
 import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
+import SimpleLineChart from '../../../components/newChart';
+
+
+// import ScatterChartWithDateLegend from '../../../components/newChart';
+
+// import { ForeCastTemp } from '../../../forecast/char-react';
+import {MixedChart} from '../../../forecast/mixed-chart';
 
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
 
+  const [readings, setReadings] = useState({categories: [], readings: []});
+  const [char, setChar] = useState('');
 
-  const ttt = async () => {
-    await fetch('http://localhost:3000/articles');
-  };
+  const getCities = async () => {
+    const res = await fetch('http://localhost:8200/meteo/city/get');
+    return await res.json();
+  }
 
+  const getTempReadings = async () => {
+    const cities = await getCities();
+    const data = new Map(cities.map((c: { id: any }) => [c.id, []]));
 
+    const res = await fetch('http://localhost:8200/meteo/readings');
+    const readings = await res.json();
+
+    console.log('readings', readings);
+
+    readings.forEach((item: { cityId: number; min: any; max: any }) => {
+      const temp = data.get(item.cityId);
+      // @ts-ignore
+      temp.push(item.max);
+    });
+    //
+    // series: [
+    //   { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
+    //   { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
+    // ],
+    //
+
+    console.log('cities', cities);
+    const getCityLegend = (id) => {
+      const city  = cities.find((c) => c.id === id);
+      return city ? city.city : '';
+    }
+
+    const charData = []
+
+    console.log('getCityLegend(key)', getCityLegend(1))
+
+    data.forEach((value, key) => {
+      charData.push({name: getCityLegend(key), data : value});
+    });
+
+    setChar(charData);
+
+    // console.log('categories', charData);
+
+  }
+
+  useEffect(()=> {
+    console.log('root mounted')
+    getTempReadings();
+    getCities();
+  }, [])
 
   return (
     <DashboardContent maxWidth="xl">
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
-        {/*<button onClick={()=>ttt()}>*/}
-        {/*  12312312*/}
-        {/*</button>*/}
-        Hi, Welcome back 👋
+        Forecast[Temperature] Dashboard
       </Typography>
+
+      <Grid size={{ xs: 15, md: 6, lg: 20 }}>
+        {/*<SimpleLineChart />*/}
+        {/*<LimitOverflow />*/}
+        {/*<CharJs />*/}
+        {/*<ScatterChartWithDateLegend />*/}
+
+        {/*TODO: UseLater, chat with background color*/}
+        {/*<ForeCastTemp />*/}
+        {/*- - - - - - - -*/}
+        <MixedChart />
+      </Grid>
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
@@ -104,16 +170,17 @@ export function OverviewAnalyticsView() {
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6, lg: 8 }}>
+        <Grid size={{ xs: 15, md: 6, lg: 20 }}>
           <AnalyticsWebsiteVisits
-            title="Website visits"
-            subheader="(+43%) than last year"
+            title="Temarature readings"
+            subheader=""
             chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-              series: [
-                { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
-                { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
-              ],
+              categories: readings.categories,
+              // series: [
+              //   { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
+              //   { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
+              // ],
+              series: char,
             }}
           />
         </Grid>
