@@ -119,7 +119,7 @@ export const UserModal = (props: any) => {
         variant="contained"
         onClick={setUser}
       >
-        Sign in
+        Create user
       </Button>
       <Button
         fullWidth
